@@ -1,13 +1,23 @@
 require 'net/http'
 require 'mikon'
+require 'tempfile'
 
 module Linkdb
-  def fetch(*names)
-    url = URI.parse()
-    res = Net::HTTP.start() do |http|
-      sub = "/link/genes/" + names.join("+")
+  def self.fetch(*names, **options)
+    options = {
+      headers: ["name", "type", "option"]
+    }.merge(options)
+
+    url = URI.parse("http://rest.genome.jp")
+    res = Net::HTTP.start(url.host, url.port) do |http|
+      sub = "/link/" + names.join("+")
       http.get(sub)
     end
-    puts res.body
+
+    file = Tempfile.new("dataframe")
+    file.write(res.body)
+    file.close
+
+    Mikon::DataFrame.from_csv(file.path, col_sep: " ", headers: options[:headers])
   end
 end
