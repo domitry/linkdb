@@ -5,12 +5,14 @@ require 'tempfile'
 module Linkdb
   def self.fetch(*names, **options)
     options = {
-      headers: ["name", "type", "option"]
+      headers: ["name", "type", "option"],
+      db: nil,
     }.merge(options)
 
     url = URI.parse("http://rest.genome.jp")
     res = Net::HTTP.start(url.host, url.port) do |http|
-      sub = "/link/" + names.join("+")
+      root = options[:db].nil? ? "/link/" : "/link/" + options[:db] + "/"
+      sub = root + names.join("+")
       http.get(sub)
     end
 
