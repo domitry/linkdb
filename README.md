@@ -20,6 +20,14 @@ Or install it yourself as:
 
     $ gem install linkdb
 
+### Ubuntu 14.04 LTS
+```
+apt install ruby2.0 ruby2.0-dev
+gem2.0 build linkdb.gemspec
+gem2.0 install mikon
+gem2.0 install linkdb.gem
+```
+
 ## Usage
 
 TODO: Write usage instructions here
